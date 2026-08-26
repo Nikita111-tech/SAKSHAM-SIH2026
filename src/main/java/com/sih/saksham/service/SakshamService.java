@@ -12,9 +12,9 @@ import java.util.*;
 @Service
 public class SakshamService {
 
-    @Value("${gemini.api.key}")
+    @Value("${gemini.api.key:test-key}")
     private String apiKey;
-    @Value("${gemini.api.url}")
+    @Value("${gemini.api.url:https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent}")
     private String apiUrl;
 
     public String extractText(MultipartFile file) throws Exception {
