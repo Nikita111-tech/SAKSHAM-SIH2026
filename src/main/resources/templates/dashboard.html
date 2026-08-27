@@ -1,46 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head><title>Dashboard</title><script src="https://cdn.tailwindcss.com"></script></head>
-<body class="bg-gray-100 p-6">
-<div class="max-w-4xl mx-auto">
-<h1 class="text-3xl font-bold mb-6">Competency Gap Analyzer</h1>
-<div class="bg-white p-6 rounded-xl shadow mb-6">
-<h2 class="font-bold">Quick Diagnostic Test (Official Statistics)</h2>
-<div id="quiz" class="mt-4"></div>
-<button onclick="submitQuiz()" class="mt-4 bg-green-600 text-white px-6 py-2 rounded">Submit & Analyze Gap</button>
+<!DOCTYPE html><html><head><title>SAKSHAM</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="bg-[#0f0c29] text-white p-6">
+<nav class="bg-white/10 p-4 rounded-2xl flex justify-between mb-6"><h1 class="font-bold text-xl">SAKSHAM - Competency Gap Analyzer</h1><a href="/upload" class="bg-blue-600 px-6 py-2 rounded-full">Go to AI MCQ Generator</a></nav>
+
+<div class="grid grid-cols-3 gap-6 mb-6">
+<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Communication</h3><div class="text-5xl font-bold text-red-400" id="commScore">80%</div></div>
+<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Technical</h3><div class="text-5xl font-bold text-green-400" id="techScore">30%</div></div>
+<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Teamwork</h3><div class="text-5xl font-bold text-yellow-400" id="teamScore">65%</div></div>
 </div>
-<div id="result" class="bg-white p-6 rounded-xl shadow hidden"></div>
-<div class="mt-6">
-<a href="/upload" class="bg-blue-600 text-white px-6 py-3 rounded-xl">Go to AI MCQ Generator →</a>
+
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-white/10 p-6 rounded-2xl"><h2 class="font-bold mb-4">Quick Diagnostic Test (Official Statistics)</h2><div id="quiz" class="space-y-3"></div><button onclick="submitQuiz()" class="mt-4 bg-green-600 px-6 py-2 rounded-xl">Submit & Analyze Gap</button></div>
+<div class="bg-white/10 p-6 rounded-2xl"><canvas id="gapChart"></canvas><div id="result" class="mt-4 hidden"></div></div>
 </div>
-</div>
+
 <script>
 const questions = [
- {q:"What is full form of NSSO?", a:["National Sample Survey Office","National Statistical System Office","National Survey..."], ans:0},
- {q:"Base year for new GDP series?", a:["2004-05","2011-12","2022-23"], ans:1},
- {q:"PLFS stands for?", a:["Periodic Labour Force Survey","Public Labour...","..."], ans:0},
- {q:"Which sampling is used in NSS?", a:["Simple Random","Stratified Multi-stage","Cluster"], ans:1},
- {q:"SNA 2008 is related to?", a:["National Accounts","Survey Agency","..."], ans:0}
+{q:"What is full form of NSSO?", a:["National Sample Survey Office","National Statistical System Office","National Survey..."], ans:0},
+{q:"Base year for new GDP series?", a:["2004-05","2011-12","2022-23"], ans:1},
+{q:"PLFS stands for?", a:["Periodic Labour Force Survey","Public Labour...","..."], ans:0},
+{q:"Which sampling is used in NSS?", a:["Simple Random","Stratified Multi-stage","Cluster"], ans:1},
+{q:"SNA 2008 is related to?", a:["National Accounts","Survey Agency","..."], ans:0}
 ];
-let html="";
-questions.forEach((qs,i)=>{
- html+=`<p class="mt-3 font-semibold">${i+1}. ${qs.q}</p>`;
- qs.a.forEach((op,j)=>{ html+=`<label class="block"><input type="radio" name="q${i}" value="${j}"> ${op}</label>`; });
-});
-document.getElementById('quiz').innerHTML=html;
+let html=""; questions.forEach((q,i)=>{ html+=<div><p>${i+1}. ${q.q}</p>; q.a.forEach((opt,j)=>{ html+=<label class="block"><input type="radio" name="q${i}" value="${j}"> ${opt}</label>}); html+=</div>}); document.getElementById("quiz").innerHTML=html;
 
-async function submitQuiz(){
- let score=0;
- questions.forEach((qs,i)=>{
-  let sel=document.querySelector(`input[name="q${i}"]:checked`);
-  if(sel && parseInt(sel.value)==qs.ans) score++;
- });
- let res=await fetch(`/api/analyze?score=${score}`, {method:'POST'});
- let data=await res.json();
- let rDiv=document.getElementById('result');
- rDiv.classList.remove('hidden');
- rDiv.innerHTML=`<h2 class="text-2xl font-bold text-red-600">Gap Identified: ${data.gap}</h2><p class="mt-2">Your Level: ${data.level} | Score: ${score}/5</p><h3 class="mt-4 font-bold">Personalized iGOT Karmayogi Recommendations:</h3><ul class="mt-2">${data.courses.map(c=>`<li class="p-2 bg-blue-50 mt-2 rounded"><b>${c.name}</b> - ${c.hours} - <a href="${c.link}" target="_blank" class="text-blue-600 underline">Open in iGOT</a></li>`).join('')}</ul>`;
+function submitQuiz(){
+ let score=0; questions.forEach((q,i)=>{ let sel=document.querySelector(input[name="q${i}"]:checked); if(sel && parseInt(sel.value)==q.ans) score++; });
+ let pct=Math.round(score/questions.length*100);
+ document.getElementById("result").classList.remove("hidden");
+ document.getElementById("result").innerHTML=<p class="text-xl">Your Score: ${pct}% - Gap Analyzed!</p>;
+ new Chart(document.getElementById("gapChart"),{type:'radar',data:{labels:['Comm','Tech','Team','NSSO','Stats'],datasets:[{label:'You',data:[80,30,65,pct,70],backgroundColor:'rgba(168,85,247,0.3)'}]}});
+ fetch('/api/submit-test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:"Test User",email:"test@sih.com",comm:80,tech:30})});
 }
 </script>
-</body>
-</html>
+</body></html>
