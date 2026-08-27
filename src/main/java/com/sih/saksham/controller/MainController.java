@@ -1,6 +1,7 @@
 package com.sih.saksham.controller;
 
 import com.sih.saksham.repository.UserRepository;
+import com.sih.saksham.service.SakshamService;
 import com.sih.saksham.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
