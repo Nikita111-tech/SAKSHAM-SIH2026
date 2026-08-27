@@ -1,4 +1,4 @@
-package com.saksham.repository;
-import com.saksham.model.User;
+package com.sih.saksham.repository;
+import com.sih.saksham.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserRepository extends JpaRepository<User, Long> {}
