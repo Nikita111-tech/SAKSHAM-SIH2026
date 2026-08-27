@@ -1,35 +1,11 @@
-<!DOCTYPE html><html><head><title>SAKSHAM</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<!DOCTYPE html><html><head><title>SAKSHAM</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><link rel="stylesheet" href="/css/style.css"></head>
 <body class="bg-[#0f0c29] text-white p-6">
-<nav class="bg-white/10 p-4 rounded-2xl flex justify-between mb-6"><h1 class="font-bold text-xl">SAKSHAM - Competency Gap Analyzer</h1><a href="/upload" class="bg-blue-600 px-6 py-2 rounded-full">Go to AI MCQ Generator</a></nav>
-
+<nav class="glass p-4 rounded-2xl flex justify-between mb-6"><h1 class="font-bold text-xl">SAKSHAM</h1><a href="/upload" class="bg-blue-600 px-6 py-2 rounded-full">AI MCQ Generator</a></nav>
 <div class="grid grid-cols-3 gap-6 mb-6">
-<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Communication</h3><div class="text-5xl font-bold text-red-400" id="commScore">80%</div></div>
-<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Technical</h3><div class="text-5xl font-bold text-green-400" id="techScore">30%</div></div>
-<div class="bg-white/10 p-6 rounded-2xl text-center"><h3>Teamwork</h3><div class="text-5xl font-bold text-yellow-400" id="teamScore">65%</div></div>
+<div class="glass score-card p-6 rounded-2xl text-center"><h3>Communication</h3><div class="text-5xl font-bold text-red-400" id="commScore">--</div></div>
+<div class="glass score-card p-6 rounded-2xl text-center"><h3>Technical</h3><div class="text-5xl font-bold text-green-400" id="techScore">--</div></div>
+<div class="glass score-card p-6 rounded-2xl text-center"><h3>Teamwork</h3><div class="glass score-card text-5xl font-bold text-yellow-400" id="teamScore">--</div></div>
 </div>
-
-<div class="grid grid-cols-2 gap-6">
-<div class="bg-white/10 p-6 rounded-2xl"><h2 class="font-bold mb-4">Quick Diagnostic Test (Official Statistics)</h2><div id="quiz" class="space-y-3"></div><button onclick="submitQuiz()" class="mt-4 bg-green-600 px-6 py-2 rounded-xl">Submit & Analyze Gap</button></div>
-<div class="bg-white/10 p-6 rounded-2xl"><canvas id="gapChart"></canvas><div id="result" class="mt-4 hidden"></div></div>
-</div>
-
-<script>
-const questions = [
-{q:"What is full form of NSSO?", a:["National Sample Survey Office","National Statistical System Office","National Survey..."], ans:0},
-{q:"Base year for new GDP series?", a:["2004-05","2011-12","2022-23"], ans:1},
-{q:"PLFS stands for?", a:["Periodic Labour Force Survey","Public Labour...","..."], ans:0},
-{q:"Which sampling is used in NSS?", a:["Simple Random","Stratified Multi-stage","Cluster"], ans:1},
-{q:"SNA 2008 is related to?", a:["National Accounts","Survey Agency","..."], ans:0}
-];
-let html=""; questions.forEach((q,i)=>{ html+=<div><p>${i+1}. ${q.q}</p>; q.a.forEach((opt,j)=>{ html+=<label class="block"><input type="radio" name="q${i}" value="${j}"> ${opt}</label>}); html+=</div>}); document.getElementById("quiz").innerHTML=html;
-
-function submitQuiz(){
- let score=0; questions.forEach((q,i)=>{ let sel=document.querySelector(input[name="q${i}"]:checked); if(sel && parseInt(sel.value)==q.ans) score++; });
- let pct=Math.round(score/questions.length*100);
- document.getElementById("result").classList.remove("hidden");
- document.getElementById("result").innerHTML=<p class="text-xl">Your Score: ${pct}% - Gap Analyzed!</p>;
- new Chart(document.getElementById("gapChart"),{type:'radar',data:{labels:['Comm','Tech','Team','NSSO','Stats'],datasets:[{label:'You',data:[80,30,65,pct,70],backgroundColor:'rgba(168,85,247,0.3)'}]}});
- fetch('/api/submit-test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:"Test User",email:"test@sih.com",comm:80,tech:30})});
-}
-</script>
+<div class="grid grid-cols-2 gap-6"><div class="glass p-6 rounded-2xl"><h2 class="font-bold mb-4">Diagnostic Test</h2><div id="quiz"></div><button onclick="submitQuiz()" class="mt-4 bg-green-600 px-6 py-2 rounded-xl w-full">Submit & Analyze Gap</button></div><div class="glass p-6 rounded-2xl"><canvas id="gapChart"></canvas><div id="result" class="mt-4 hidden glass p-4 rounded-xl"></div></div></div>
+<script src="/js/dashboard.js"></script>
 </body></html>
