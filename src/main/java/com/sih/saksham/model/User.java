@@ -1,4 +1,4 @@
-package com.saksham.model;
+package com.sih.saksham.model;
 import jakarta.persistence.*;
 @Entity
 public class User {
