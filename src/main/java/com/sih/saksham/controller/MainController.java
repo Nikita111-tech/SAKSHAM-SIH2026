@@ -49,8 +49,8 @@ public class MainController {
 
     @PostMapping("/api/analyze")
     @ResponseBody
-    public Map<String, Object> analyze(@RequestParam("score") int score) {
-        return Map.of("result", service.analyze(score));
+    public Map<String, Object> analyzeGap(@RequestParam("score") int score) {
+        return Map.of("result", service.analyzeGap(score));
     }
     
     @PostMapping("/api/submit-test")
